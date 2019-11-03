@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
 
 // @material-ui/icons
@@ -17,8 +17,12 @@ import Accordion from "components/Accordion/Accordion.jsx";
 import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
+import CardFooter from "components/Card/CardFooter.jsx";
+import Button from "components/CustomButtons/Button.jsx";
 
 import { cardTitle } from "assets/jss/material-dashboard-pro-react.jsx";
+import bgGame1 from "assets/img/lucky-spin.jpg";
+import bgGame2 from "assets/img/lucky-draw.jpg";
 
 const styles = {
   cardTitle,
@@ -32,305 +36,98 @@ const styles = {
     color: "#999999"
   }
 };
- class Game extends Component {
-    render() {
-        const { classes } = this.props;
-        return (    
-            <GridContainer>
-                    <GridItem xs={12} sm={12} md={6}>
-                        <Card>
-                        <CardHeader>
-                            <h4 className={classes.cardTitle}>
-                            Navigation Pills <small> - Horizontal Tabs</small>
-                            </h4>
-                        </CardHeader>
-                        <CardBody>
-                            <NavPills
-                            color="warning"
-                            tabs={[
-                                {
-                                tabButton: "Profile",
-                                tabContent: (
-                                    <span>
-                                    <p>
-                                        Collaboratively administrate empowered markets via
-                                        plug-and-play networks. Dynamically procrastinate
-                                        B2C users after installed base benefits.
-                                    </p>
-                                    <br />
-                                    <p>
-                                        Dramatically visualize customer directed convergence
-                                        without revolutionary ROI. Collaboratively
-                                        administrate empowered markets via plug-and-play
-                                        networks. Dynamically procrastinate B2C users after
-                                        installed base benefits.
-                                    </p>
-                                    <br />
-                                    <p>This is very nice.</p>
-                                    </span>
-                                )
-                                },
-                                {
-                                tabButton: "Settings",
-                                tabContent: (
-                                    <span>
-                                    <p>
-                                        Efficiently unleash cross-media information without
-                                        cross-media value. Quickly maximize timely
-                                        deliverables for real-time schemas.
-                                    </p>
-                                    <br />
-                                    <p>
-                                        Dramatically maintain clicks-and-mortar solutions
-                                        without functional solutions.
-                                    </p>
-                                    </span>
-                                )
-                                },
-                                {
-                                tabButton: "Options",
-                                tabContent: (
-                                    <span>
-                                    <p>
-                                        Completely synergize resource taxing relationships
-                                        via premier niche markets. Professionally cultivate
-                                        one-to-one customer service with robust ideas.{" "}
-                                    </p>
-                                    <br />
-                                    <p>
-                                        Dynamically innovate resource-leveling customer
-                                        service for state of the art customer service.
-                                    </p>
-                                    </span>
-                                )
-                                }
-                            ]}
-                            />
-                        </CardBody>
-                        </Card>
-                    </GridItem>
+class Game extends Component {
+  render() {
+    const { classes } = this.props;
+    return (
+      <GridContainer>
+        <GridItem xs={12} sm={12} md={6}>
+          <Card>
+            <CardHeader>
+              <h4
+                style={{ "font-weight": "bold" }}
+                className={classes.cardTitle}
+              >
+                Vòng quay may mắn
+              </h4>
+            </CardHeader>
+            <CardBody>
+              <NavPills
+                color="warning"
+                tabs={[
+                  {
+                    tabButton: "Trò chơi",
+                    tabContent: (
+                      <div>
+                        <img src={bgGame1} alt="..." style={{ width: "99%" }} />
 
-                    <GridItem xs={12} sm={12} md={6}>
-                        <Card>
-                        <CardHeader>
-                            <h4 className={classes.cardTitle}>
-                            Navigation Pills <small> - Horizontal Tabs</small>
-                            </h4>
-                        </CardHeader>
-                        <CardBody>
-                            <NavPills
-                            color="warning"
-                            tabs={[
-                                {
-                                tabButton: "Profile",
-                                tabContent: (
-                                    <span>
-                                    <p>
-                                        Collaboratively administrate empowered markets via
-                                        plug-and-play networks. Dynamically procrastinate
-                                        B2C users after installed base benefits.
-                                    </p>
-                                    <br />
-                                    <p>
-                                        Dramatically visualize customer directed convergence
-                                        without revolutionary ROI. Collaboratively
-                                        administrate empowered markets via plug-and-play
-                                        networks. Dynamically procrastinate B2C users after
-                                        installed base benefits.
-                                    </p>
-                                    <br />
-                                    <p>This is very nice.</p>
-                                    </span>
-                                )
-                                },
-                                {
-                                tabButton: "Settings",
-                                tabContent: (
-                                    <span>
-                                    <p>
-                                        Efficiently unleash cross-media information without
-                                        cross-media value. Quickly maximize timely
-                                        deliverables for real-time schemas.
-                                    </p>
-                                    <br />
-                                    <p>
-                                        Dramatically maintain clicks-and-mortar solutions
-                                        without functional solutions.
-                                    </p>
-                                    </span>
-                                )
-                                },
-                                {
-                                tabButton: "Options",
-                                tabContent: (
-                                    <span>
-                                    <p>
-                                        Completely synergize resource taxing relationships
-                                        via premier niche markets. Professionally cultivate
-                                        one-to-one customer service with robust ideas.{" "}
-                                    </p>
-                                    <br />
-                                    <p>
-                                        Dynamically innovate resource-leveling customer
-                                        service for state of the art customer service.
-                                    </p>
-                                    </span>
-                                )
-                                }
-                            ]}
-                            />
-                        </CardBody>
-                        </Card>
-                    </GridItem>
+                      </div>
+                    )
+                  },
+                  {
+                    tabButton: "Mô tả",
+                    tabContent: (
+                      <span>
+                        <p>
+                          VQMM đã trở lại đây, hàng nghìn giải thưởng đã được
+                          gửi đến các Quý khách hàng thân yêu. Cùng chơi nào!!
+                        </p>
+                      </span>
+                    )
+                  }
+                ]}
+              />
+            </CardBody>
+            <CardFooter style={{ "justify-content": "flex-end" }}>
+              <Button color="warning" round>
+                Play
+              </Button>
+            </CardFooter>
+          </Card>
+        </GridItem>
 
-                    <GridItem xs={12} sm={12} md={6}>
-                        <Card>
-                        <CardHeader>
-                            <h4 className={classes.cardTitle}>
-                            Navigation Pills <small> - Horizontal Tabs</small>
-                            </h4>
-                        </CardHeader>
-                        <CardBody>
-                            <NavPills
-                            color="warning"
-                            tabs={[
-                                {
-                                tabButton: "Profile",
-                                tabContent: (
-                                    <span>
-                                    <p>
-                                        Collaboratively administrate empowered markets via
-                                        plug-and-play networks. Dynamically procrastinate
-                                        B2C users after installed base benefits.
-                                    </p>
-                                    <br />
-                                    <p>
-                                        Dramatically visualize customer directed convergence
-                                        without revolutionary ROI. Collaboratively
-                                        administrate empowered markets via plug-and-play
-                                        networks. Dynamically procrastinate B2C users after
-                                        installed base benefits.
-                                    </p>
-                                    <br />
-                                    <p>This is very nice.</p>
-                                    </span>
-                                )
-                                },
-                                {
-                                tabButton: "Settings",
-                                tabContent: (
-                                    <span>
-                                    <p>
-                                        Efficiently unleash cross-media information without
-                                        cross-media value. Quickly maximize timely
-                                        deliverables for real-time schemas.
-                                    </p>
-                                    <br />
-                                    <p>
-                                        Dramatically maintain clicks-and-mortar solutions
-                                        without functional solutions.
-                                    </p>
-                                    </span>
-                                )
-                                },
-                                {
-                                tabButton: "Options",
-                                tabContent: (
-                                    <span>
-                                    <p>
-                                        Completely synergize resource taxing relationships
-                                        via premier niche markets. Professionally cultivate
-                                        one-to-one customer service with robust ideas.{" "}
-                                    </p>
-                                    <br />
-                                    <p>
-                                        Dynamically innovate resource-leveling customer
-                                        service for state of the art customer service.
-                                    </p>
-                                    </span>
-                                )
-                                }
-                            ]}
-                            />
-                        </CardBody>
-                        </Card>
-                    </GridItem>
-
-                    <GridItem xs={12} sm={12} md={6}>
-                    <Card>
-                    <CardHeader>
-                        <h4 className={classes.cardTitle}>
-                        Navigation Pills <small> - Horizontal Tabs</small>
-                        </h4>
-                    </CardHeader>
-                    <CardBody>
-                        <NavPills
-                        color="warning"
-                        tabs={[
-                            {
-                            tabButton: "Profile",
-                            tabContent: (
-                                <span>
-                                <p>
-                                    Collaboratively administrate empowered markets via
-                                    plug-and-play networks. Dynamically procrastinate
-                                    B2C users after installed base benefits.
-                                </p>
-                                <br />
-                                <p>
-                                    Dramatically visualize customer directed convergence
-                                    without revolutionary ROI. Collaboratively
-                                    administrate empowered markets via plug-and-play
-                                    networks. Dynamically procrastinate B2C users after
-                                    installed base benefits.
-                                </p>
-                                <br />
-                                <p>This is very nice.</p>
-                                </span>
-                            )
-                            },
-                            {
-                            tabButton: "Settings",
-                            tabContent: (
-                                <span>
-                                <p>
-                                    Efficiently unleash cross-media information without
-                                    cross-media value. Quickly maximize timely
-                                    deliverables for real-time schemas.
-                                </p>
-                                <br />
-                                <p>
-                                    Dramatically maintain clicks-and-mortar solutions
-                                    without functional solutions.
-                                </p>
-                                </span>
-                            )
-                            },
-                            {
-                            tabButton: "Options",
-                            tabContent: (
-                                <span>
-                                <p>
-                                    Completely synergize resource taxing relationships
-                                    via premier niche markets. Professionally cultivate
-                                    one-to-one customer service with robust ideas.{" "}
-                                </p>
-                                <br />
-                                <p>
-                                    Dynamically innovate resource-leveling customer
-                                    service for state of the art customer service.
-                                </p>
-                                </span>
-                            )
-                            }
-                        ]}
-                        />
-                    </CardBody>
-                    </Card>
-                </GridItem>
-            </GridContainer>
-            
-        )
-    }
+        <GridItem xs={12} sm={12} md={6}>
+          <Card>
+            <CardHeader>
+              <h4
+                style={{ "font-weight": "bold" }}
+                className={classes.cardTitle}
+              >
+                Quay số may mắn
+              </h4>
+            </CardHeader>
+            <CardBody>
+              <NavPills
+                color="warning"
+                tabs={[
+                  {
+                    tabButton: "Trò chơi",
+                    tabContent: (
+                      <div>
+                        <img src={bgGame2} alt="..." style={{ width: "99%" }} />
+                      </div>
+                    )
+                  },
+                  {
+                    tabButton: "Mô tả",
+                    tabContent: (
+                      <span>
+                        <p>Quay số may mắn</p>
+                      </span>
+                    )
+                  }
+                ]}
+              />
+            </CardBody>
+            <CardFooter style={{ "justify-content": "flex-end" }}>
+              <Button color="warning" round>
+                Play
+              </Button>
+            </CardFooter>
+          </Card>
+        </GridItem>
+      </GridContainer>
+    );
+  }
 }
 export default withStyles(styles)(Game);
