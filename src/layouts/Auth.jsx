@@ -9,7 +9,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import AuthNavbar from "components/Navbars/AuthNavbar.jsx";
 import Footer from "components/Footer/Footer.jsx";
 
-import routes from "routes.js";
+import routes from "./routes_auth.js";
 
 import pagesStyle from "assets/jss/material-dashboard-pro-react/layouts/authStyle.jsx";
 
@@ -42,19 +42,20 @@ class Pages extends React.Component {
     });
   };
   getBgImage = () => {
-    if (window.location.pathname.indexOf("/auth/register-page") !== -1) {
-      return register;
-    } else if (window.location.pathname.indexOf("/auth/login-page") !== -1) {
-      return login;
-    } else if (window.location.pathname.indexOf("/auth/pricing-page") !== -1) {
-      return pricing;
-    } else if (
-      window.location.pathname.indexOf("/auth/lock-screen-page") !== -1
-    ) {
-      return lock;
-    } else if (window.location.pathname.indexOf("/auth/error-page") !== -1) {
-      return error;
-    }
+    // if (window.location.pathname.indexOf("/auth/register-page") !== -1) {
+    //   return register;
+    // } else if (window.location.pathname.indexOf("/auth/login-page") !== -1) {
+    //   return login;
+    // } else if (window.location.pathname.indexOf("/auth/pricing-page") !== -1) {
+    //   return pricing;
+    // } else if (
+    //   window.location.pathname.indexOf("/auth/lock-screen-page") !== -1
+    // ) {
+    //   return lock;
+    // } else if (window.location.pathname.indexOf("/auth/error-page") !== -1) {
+    //   return error;
+    // }
+    return login;
   };
   getActiveRoute = routes => {
     let activeRoute = "Default Brand Text";
@@ -78,14 +79,14 @@ class Pages extends React.Component {
     const { classes, ...rest } = this.props;
     return (
       <div>
-        <AuthNavbar brandText={this.getActiveRoute(routes)} {...rest} />
+        {/* <AuthNavbar brandText={this.getActiveRoute(routes)} {...rest} /> */}
         <div className={classes.wrapper} ref="wrapper">
           <div
             className={classes.fullPage}
             style={{ backgroundImage: "url(" + this.getBgImage() + ")" }}
           >
             <Switch>{this.getRoutes(routes)}</Switch>
-            <Footer white />
+            {/* <Footer white /> */}
           </div>
         </div>
       </div>

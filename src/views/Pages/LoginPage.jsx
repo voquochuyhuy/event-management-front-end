@@ -20,7 +20,9 @@ import Card from "components/Card/Card.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
-
+import EmailInput from '../DA-CN/components/CustomInputEmail.jsx';
+import CustomInputPassword from "../DA-CN/components/CustomInputPassword.jsx";
+import axios from  "axios";
 import loginPageStyle from "assets/jss/material-dashboard-pro-react/views/loginPageStyle.jsx";
 
 class LoginPage extends React.Component {
@@ -44,6 +46,36 @@ class LoginPage extends React.Component {
     clearTimeout(this.timeOutFunction);
     this.timeOutFunction = null;
   }
+  verifyData = () =>{
+    return this.emailInput.verifyInput() && this.passwordInput.verifyInput();
+  }
+  submit =async ()=>{
+    if(!this.verifyData()) return
+    let role, token;
+    await axios({
+      method: "post",
+      //api
+      url: `http://localhost:3001/auth/login`,
+      data: {
+        username: this.emailInput.getValue(),
+        password: this.passwordInput.getValue(),
+      },
+    }).then(async (res) => {
+      console.log(res,res.data);
+      let token = res.data.access_token;
+      axios.defaults.headers.common['Authorization'] = res.data.access_token;
+      localStorage.setItem('access_token', token);
+      
+    }).catch(error=>{
+      if (error.message === "Network Error")
+      {
+        alert('Server is down');
+        return;
+      }
+      alert(`Email or password is not valid`);
+    });
+    this.props.history.push("/event-management");
+  }
   render() {
     const { classes } = this.props;
     return (
@@ -57,7 +89,7 @@ class LoginPage extends React.Component {
                   color="rose"
                 >
                   <h4 className={classes.cardTitle}>Log in</h4>
-                  <div className={classes.socialLine}>
+                  {/* <div className={classes.socialLine}>
                     {[
                       "fab fa-facebook-square",
                       "fab fa-twitter",
@@ -74,10 +106,10 @@ class LoginPage extends React.Component {
                         </Button>
                       );
                     })}
-                  </div>
+                  </div> */}
                 </CardHeader>
                 <CardBody>
-                  <CustomInput
+                  {/* <CustomInput
                     labelText="First Name.."
                     id="firstname"
                     formControlProps={{
@@ -90,40 +122,17 @@ class LoginPage extends React.Component {
                         </InputAdornment>
                       )
                     }}
+                  /> */}
+                  <EmailInput 
+                    ref={ref => this.emailInput = ref}
                   />
-                  <CustomInput
-                    labelText="Email..."
-                    id="email"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                    inputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <Email className={classes.inputAdornmentIcon} />
-                        </InputAdornment>
-                      )
-                    }}
-                  />
-                  <CustomInput
-                    labelText="Password"
-                    id="password"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                    inputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <Icon className={classes.inputAdornmentIcon}>
-                            lock_outline
-                          </Icon>
-                        </InputAdornment>
-                      )
-                    }}
+
+                  <CustomInputPassword 
+                    ref={ref => this.passwordInput = ref}
                   />
                 </CardBody>
                 <CardFooter className={classes.justifyContentCenter}>
-                  <Button color="rose" simple size="lg" block>
+                  <Button color="rose" simple size="lg" block onClick={this.submit}>
                     Let's Go
                   </Button>
                 </CardFooter>
