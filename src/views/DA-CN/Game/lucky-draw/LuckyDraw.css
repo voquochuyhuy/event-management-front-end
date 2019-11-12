@@ -17,9 +17,8 @@
 }
 
 #lucky-draw {
-	width: 50%;
-	height: 50%;
-	position: fixed;
+	width: 100%;
+	padding: 120px 0;
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
@@ -28,6 +27,7 @@
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: cover;
+	overflow: hidden;
 }
 
 .box {
@@ -76,6 +76,7 @@
 	height: 100%;
 	top: 0;
 	left: 0;
+	z-index: 1;
 }
 
 .reward {
