@@ -65,7 +65,7 @@ class LoginPage extends React.Component {
       let token = res.data.access_token;
       axios.defaults.headers.common['Authorization'] = res.data.access_token;
       localStorage.setItem('access_token', token);
-      
+      this.props.history.push("/event-management");
     }).catch(error=>{
       if (error.message === "Network Error")
       {
@@ -74,7 +74,7 @@ class LoginPage extends React.Component {
       }
       alert(`Email or password is not valid`);
     });
-    this.props.history.push("/event-management");
+   
   }
   render() {
     const { classes } = this.props;
