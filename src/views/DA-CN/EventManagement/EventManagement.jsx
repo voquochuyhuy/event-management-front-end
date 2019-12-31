@@ -26,10 +26,11 @@ import DialogAddEvent from '../components/DialogAddEvent';
 import DialogConFirmDelete from '../components/DialogConFirmDelete';
 import DialogUpdateEvent from '../components/DialogUpdateEvent';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import Snackbar from '@material-ui/core/Snackbar';
+
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import { makeStyles } from '@material-ui/core/styles';
-
+import MySnackbarContentWrapper from "../components/SnackBar";
+import Snackbar from '@material-ui/core/Snackbar';
 const styles = {
   cardIconTitle: {
     ...cardTitle,
@@ -53,7 +54,9 @@ class EventManagement extends Component {
           openAdd : false,
           openDelete : false,
           openUpdate : false,
-          id:""
+          id:"",
+          openSnackbar:false,
+          color : true,
         };
       }
     componentWillMount() {
@@ -63,19 +66,25 @@ class EventManagement extends Component {
     componentDidMount(){   
       axios.get(`http://localhost:3001/graphql?query=${getEvents}`)
       .then(result => {
+
+        if(result.data.errors){
+          localStorage.clear()
+          this.props.history.push('/auth/login');
+          return;
+        }
         console.log(result);
         let events = result.data.data.getEvents;
         let parsingdata = events.map((event,key)=>{
           let startTimeParsed = new Date(event.startTime).toLocaleString('vi-VN');
           let endTimeParsed = new Date(event.endTime).toLocaleString('vi-VN'); 
-          return [
-            event.id,
-            event.eventName,
-            event.organizationName,
-            event.place,
-            startTimeParsed,
-            endTimeParsed,
-            (
+          return {
+            id :event.id,
+            eventName :event.eventName,
+            organizationName :event.organizationName,
+            place: event.place,
+            startTime :startTimeParsed,
+            endTime :endTimeParsed,
+            actions:(
               // we've added some custom button actions
               <div className="actions-right">
                 {/* use this button to add a edit kind of action */}
@@ -119,7 +128,7 @@ class EventManagement extends Component {
                 </Button>{" "}
               </div>
             )
-          ]
+          }
         })
         this.setState({data: parsingdata});
 
@@ -138,14 +147,14 @@ class EventManagement extends Component {
         let parsingdata = events.map((event,key)=>{
           let startTimeParsed = new Date(event.startTime).toLocaleString('vi-VN');
           let endTimeParsed = new Date(event.endTime).toLocaleString('vi-VN'); 
-          return [
-            event.id,
-            event.eventName,
-            event.organizationName,
-            event.place,
-            startTimeParsed,
-            endTimeParsed,
-            (
+          return {
+            id :event.id,
+            eventName :event.eventName,
+            organizationName :event.organizationName,
+            place: event.place,
+            startTime :startTimeParsed,
+            endTime :endTimeParsed,
+            actions:(
               // we've added some custom button actions
               <div className="actions-right">
                 {/* use this button to add a edit kind of action */}
@@ -189,7 +198,7 @@ class EventManagement extends Component {
                 </Button>{" "}
               </div>
             )
-          ]
+          }
         })
         this.setState({data: parsingdata});
 
@@ -213,9 +222,13 @@ class EventManagement extends Component {
         },
         })
         .then(res => {
-          this.fetchData();
-          console.log("??")
-          this.setState({openAdd:false});
+          if(res.data.errors){
+            this.setState({openAdd:false,color:false,openSnackbar:true})
+            return;
+          }
+          this.fetchData(); 
+          this.setState({openAdd:false,openSnackbar:true,color:true});
+         
           // console.log(res)
           // axios.post(`http://localhost:3001/graphql`, {
           //   query: `mutation createStatisticalMutation($statistical:CreateStatisticalInput) {
@@ -235,10 +248,10 @@ class EventManagement extends Component {
           //   })
           //   .then(res => console.log(res))
           //   .catch(err => console.log(err))
-        }).then(()=>{
-          this.setState({openAdd:false});
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+          this.setState({openAdd:false,color:false,openSnackbar:true})
+        });
 
         
       
@@ -257,11 +270,11 @@ class EventManagement extends Component {
         })
         .then(res => {
           this.fetchData();
-          this.setState({openAdd:false})
+          this.setState({openDelete:false})
         })
         .catch(err =>{
           console.log(err)
-          this.setState({openAdd:false})
+          this.setState({openDelete:false})
         });
 
         
@@ -286,8 +299,12 @@ class EventManagement extends Component {
         },
         })
         .then(res => {
+          if(res.data.errors){
+            this.setState({openUpdate:false,color:false,openSnackbar:true})
+            return;
+          }
           this.fetchData();
-          this.setState({openUpdate:false});
+          this.setState({openUpdate:false,color:true,openSnackbar:true});
           // console.log(res)
           // axios.post(`http://localhost:3001/graphql`, {
           //   query: `mutation createStatisticalMutation($statistical:CreateStatisticalInput) {
@@ -322,13 +339,30 @@ class EventManagement extends Component {
     openDialogUpdate = ()=>{
       this.setState({openUpdate:true})
     }
+     handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    this.setState({openSnackbar : false})
+    };
+    logout = ()=>{
+      localStorage.clear();
+      this.props.history.push('/auth/login')
+    }
       render() {
         const { classes } = this.props;
         return (
           <GridContainer>
-            <GridItem>
-              <Button color='success' onClick={this.openDialog}>Thêm sự kiện</Button>
-            </GridItem> 
+            <GridContainer>
+              <GridItem xs={10}>
+                <Button color='success' onClick={this.openDialog}>Thêm sự kiện</Button>
+              </GridItem>
+              <GridItem xs={2}>
+                <Button color='success' onClick={this.logout}>Đăng xuất</Button>
+              </GridItem>
+            </GridContainer>
+             
             <GridItem xs={12}>
               <Card>
                 <CardHeader color="primary" icon>
@@ -338,7 +372,7 @@ class EventManagement extends Component {
                   {/* <h4 className={classes.cardIconTitle}>React Table</h4> */}
                 </CardHeader>
                 <CardBody>
-                  <Table
+                  {/* <Table
                     tableHead={[
                       "STT",
                       "Tên sự kiện",
@@ -370,6 +404,44 @@ class EventManagement extends Component {
                       classes.center,
                     ]}
                     customHeadClassesForCells={[0, 1, 2, 3, 4, 5, 6]}
+                  /> */}
+                  <ReactTable
+                    data={this.state.data}
+                    filterable
+                    columns={[
+                      {
+                        Header: "STT",
+                        accessor: "id"
+                      },
+                      {
+                        Header: "Tên sự kiện",
+                        accessor: "eventName"
+                      },
+                      {
+                        Header: "Đơn vị tổ chức",
+                        accessor: "organizationName"
+                      },
+                      {
+                        Header: "Nơi tổ chức",
+                        accessor: "place"
+                      },
+                      {
+                        Header: "Bắt đầu",
+                        accessor: "startTime",
+                      },
+                      {
+                        Header: "Kết thúc",
+                        accessor: "endTime",
+                      },
+                      {
+                        Header: "",
+                        accessor: "actions",
+                      }
+                    ]}
+                    defaultPageSize={5}
+                    showPaginationTop
+                    showPaginationBottom={false}
+                    className="-striped -highlight"
                   />
                 </CardBody>
               </Card>
@@ -377,6 +449,21 @@ class EventManagement extends Component {
             <DialogAddEvent open={this.state.openAdd} onCancel={this.onCancel} onConfirm={this.onConfirmAdd} />
             <DialogConFirmDelete open={this.state.openDelete} onCancel={this.onCancel} onConfirm={this.onConfirmDelete}/>
             <DialogUpdateEvent open={this.state.openUpdate} onCancel={this.onCancel} onConfirm={this.onConfirmUpdate}/>
+            <Snackbar
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={this.state.openSnackbar}
+              autoHideDuration={6000}
+              onClose={this.handleClose}
+            >
+              <MySnackbarContentWrapper
+                onClose={this.handleClose}
+                variant={this.state.color ===  true ? "success" : "error"}
+                message={this.state.color ===  true ? "Thành công!" : "Thất bại"}
+              />
+            </Snackbar>
           </GridContainer> 
         );
       }

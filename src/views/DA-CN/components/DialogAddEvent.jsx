@@ -36,6 +36,7 @@ class DialogAddEvent extends Component {
   }
   
   handleAddBoard=()=>{
+    if(!this.verifyData()) return
     const eventName = this.eventName.getValue();
     const organization = this.organization.getValue();
     const place = this.place.getValue();
@@ -44,7 +45,9 @@ class DialogAddEvent extends Component {
     this.props.onConfirm(eventName,organization,place,this.state.startDate,this.state.endDate);   
     this.props.onCancel()
   }
- 
+  verifyData = () =>{
+    return this.eventName.verifyInput() && this.organization.verifyInput() && this.place.verifyInput();
+  }
   render() {
     const { classes } = this.props;
     return (
@@ -73,14 +76,17 @@ class DialogAddEvent extends Component {
             <Card>
               <CardBody>
                 <InputNormal 
+                 
                   ref={ref=>this.eventName = ref}  
                   placeholder = "Tên sự kiện"
                 />
                 <InputNormal 
+                  
                   ref={ref=>this.organization = ref}  
                   placeholder = "Đơn vị tổ chức"
                 />
                 <InputNormal 
+                 
                   ref={ref=>this.place = ref}  
                   placeholder = "Nơi tổ chức"
                 />

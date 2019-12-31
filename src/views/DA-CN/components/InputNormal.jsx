@@ -14,10 +14,23 @@ class InputNormal extends React.Component {
     getValue = () => this.state.value;
     resetValue = () =>{this.setState({value :""});}
     setValue = (data)=>{this.setState({value : data}); console.log(data)}
+    verifyInput = () => {
+  
+      const value = this.state.value;
+      let helpText = undefined;
+  
+      if (!!this.props.required && !!!value)
+        helpText = `Trường này không được bỏ trống`;
+      
+      this.setState({ helpText });
+      return helpText === undefined
+    };
     render() {
         const {inputProps } = this.props;
         return (
             <CustomInput
+                 error={this.state.helpText !== undefined}
+                 helpText={this.state.helpText}
                 center = {this.props.center}
                 labelText={this.props.placeholder}
                 id=""
@@ -52,7 +65,9 @@ InputNormal.propTypes = {
   center : PropTypes.bool
 }
 InputNormal.defaultProps = {
-  center :false
+  center :false,
+  required: true,
+  value: ""
 }
 
 export default InputNormal;

@@ -22,6 +22,8 @@ import DialogAddOrganization from "../components/DialogAddOrganization";
 import axios from "axios";
 import DialogConFirmDelete from '../components/DialogConFirmDelete';
 import DialogUpdateOrganization from '../components/DialogUpdateOrganization';
+import MySnackbarContentWrapper from "../components/SnackBar";
+import Snackbar from '@material-ui/core/Snackbar';
 
 const styles = {
   cardIconTitle: {
@@ -45,7 +47,9 @@ class Organization extends Component {
           openAdd : false,
           openDelete : false,
           openUpdate : false,
-          id : ""
+          id : "",
+          openSnackbar:false,
+          color : true,
         };
       }
     onCancel = ()=>{
@@ -69,12 +73,20 @@ class Organization extends Component {
           },
           })
         .then(res => {
+          if(res.data.errors){
+            this.setState({openAdd:false,color:false,openSnackbar:true})
+            return;
+          }
           this.fetchData();
+          this.setState({openAdd:false,openSnackbar:true,color:true});
         }
         )
         .catch(err => {
           console.log(err);
-          this.setState({open:false});
+         
+          
+          this.setState({openAdd:false,color:false,openSnackbar:true})
+          
         })
         this.setState({open:false});
     } 
@@ -117,8 +129,13 @@ class Organization extends Component {
         },
         })
       .then(res => {
+        if(res.data.errors){
+          this.setState({openUpdate:false,color:false,openSnackbar:true})
+          return;
+        }
         this.fetchData();
-        this.setState({openAdd:false});
+        this.setState({openUpdate:false,color:true,openSnackbar:true})
+
       }
       )
       .catch(err => {
@@ -133,14 +150,19 @@ class Organization extends Component {
     }
     componentDidMount(){
       axios.get(`http://localhost:3001/graphql?query=${organizationQuery}`).then(res=>{
+        if(res.data.errors){
+          localStorage.clear()
+          this.props.history.push('/auth/login');
+          return;
+        }
         var data = res.data.data.getOrganizations;
         let organizations = data.map((organization,key)=>{
-          return [
-            organization.id,
-            organization.organizationName,
-            organization.place,
-            organization.hotline,
-            (
+          return {
+            id:organization.id,
+            organizationName:organization.organizationName,
+            place:organization.place,
+            hotline:organization.hotline,
+            actions :(
               // we've added some custom button actions
               <div className="actions-right">
                 {/* use this button to add a edit kind of action */}
@@ -185,7 +207,7 @@ class Organization extends Component {
                 </Button>{" "}
               </div>
             )
-            ]
+          }
         })
         this.setState({data:organizations});
       })
@@ -201,14 +223,19 @@ class Organization extends Component {
     }
     fetchData = ()=>{
       axios.get(`http://localhost:3001/graphql?query=${organizationQuery}`).then(res=>{
+        if(res.data.errors){
+          localStorage.clear()
+          this.props.history.push('/auth/login');
+          return;
+        }
         var data = res.data.data.getOrganizations;
         let organizations = data.map((organization,key)=>{
-          return [
-            organization.id,
-            organization.organizationName,
-            organization.place,
-            organization.hotline,
-            (
+          return {
+            id:organization.id,
+            organizationName:organization.organizationName,
+            place:organization.place,
+            hotline:organization.hotline,
+            actions :(
               // we've added some custom button actions
               <div className="actions-right">
                 {/* use this button to add a edit kind of action */}
@@ -253,11 +280,18 @@ class Organization extends Component {
                 </Button>{" "}
               </div>
             )
-            ]
+          }
         })
         this.setState({data:organizations});
       })
     }
+    handleClose = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+  
+    this.setState({openSnackbar : false})
+    };
       render() {
         const { classes } = this.props;
         return (
@@ -275,7 +309,7 @@ class Organization extends Component {
                 </CardHeader>
                 <CardBody>
                   
-                  <Table
+                  {/* <Table
                     tableHead={[
                       "STT",
                       "Tên tổ chức",
@@ -304,6 +338,38 @@ class Organization extends Component {
                       
                     ]}
                     customHeadClassesForCells={[0, 1, 2, 3, 4]}
+                  /> */}
+                  <ReactTable
+                    data={this.state.data}
+                    filterable
+                    columns={[
+                      {
+                        Header: "STT",
+                        accessor: "id"
+                      },
+                      {
+                        Header: "Tên tổ chức",
+                        accessor: "organizationName"
+                      },
+                      {
+                        Header: "Địa chỉ",
+                        accessor: "place",
+                        width : 220
+                      },
+                      {
+                        Header: "Hot line",
+                        accessor: "hotline"
+                      },
+                      {
+                        Header: "",
+                        accessor: "actions"
+                      },
+
+                    ]}
+                    defaultPageSize={5}
+                    showPaginationTop
+                    showPaginationBottom={false}
+                    className="-striped -highlight"
                   />
                 </CardBody>
               </Card>
@@ -311,6 +377,21 @@ class Organization extends Component {
             <DialogAddOrganization  open={this.state.openAdd} onCancel={this.onCancel} onConfirm={this.onConfirmAdd}/>
             <DialogConFirmDelete  open={this.state.openDelete} onCancel={this.onCancel} onConfirm={this.onConfirmDelete}/>
             <DialogUpdateOrganization  open={this.state.openUpdate} onCancel={this.onCancel} onConfirm={this.onConfirmUpdate} />
+            <Snackbar
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={this.state.openSnackbar}
+              autoHideDuration={6000}
+              onClose={this.handleClose}
+            >
+              <MySnackbarContentWrapper
+                onClose={this.handleClose}
+                variant={this.state.color ===  true ? "success" : "error"}
+                message={this.state.color ===  true ? "Thành công!" : "Thất bại"}
+              />
+            </Snackbar>
           </GridContainer>
         );
       }

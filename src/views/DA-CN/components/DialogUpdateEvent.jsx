@@ -62,7 +62,7 @@ class DialogUpdateEvent extends Component {
           disableTypography
           className={classes.modalHeader}
         >
-          <h4 className={classes.modalTitle}>TẠO MỚI SỰ KIỆN</h4>
+          <h4 className={classes.modalTitle}>Chỉnh sửa thông tin</h4>
         </DialogTitle>
         <DialogContent
           id="classic-modal-slide-description"

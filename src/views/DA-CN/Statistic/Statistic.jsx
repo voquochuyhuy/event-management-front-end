@@ -16,7 +16,8 @@ import Card from "components/Card/Card.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardIcon from "components/Card/CardIcon.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
-
+import MySnackbarContentWrapper from "../components/SnackBar";
+import Snackbar from '@material-ui/core/Snackbar';
 // import { dataTable } from "variables/general.jsx";
 
 import { cardTitle } from "assets/jss/material-dashboard-pro-react.jsx";
@@ -49,7 +50,9 @@ class Statistic extends Component {
           openAdd : false,
           openDelete : false,
           openUpdate : false,
-          id : ''
+          id : '',
+          openSnackbar:false,
+          color : true,
         };
     }
     componentWillMount() {
@@ -58,17 +61,22 @@ class Statistic extends Component {
     }
     componentDidMount(){
       axios.get(`http://localhost:3001/graphql?query=${statisticQuery}`).then(res=>{
+        if(res.data.errors){
+          localStorage.clear()
+          this.props.history.push('/auth/login');
+          return;
+        }
         var data = res.data.data.getStatisticals;
         console.log(res.data);
         let statistical = data.map((statistical,key)=>{
-          return [
-            statistical.id,
-            statistical.eventName,
-            statistical.cost,
-            statistical.numberOfParticipants,
-            statistical.revenue,
-            statistical.note,
-            (
+          return {
+            id:statistical.id,
+            eventName:statistical.eventName,
+            cost:new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(statistical.cost),
+            numberOfParticipants:new Intl.NumberFormat( { style: 'decimal' }).format(statistical.numberOfParticipants),
+            revenue:new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(statistical.revenue),
+            note:statistical.note,
+            actions:(
               // we've added some custom button actions
               <div className="actions-right">   
                 {/* use this button to add a edit kind of action */}
@@ -113,7 +121,7 @@ class Statistic extends Component {
                 </Button>{" "}
               </div>
             )
-          ]
+          }
         })
         this.setState({data:statistical});
       })
@@ -138,14 +146,14 @@ class Statistic extends Component {
         var data = res.data.data.getStatisticals;
         console.log(res.data);
         let statistical = data.map((statistical,key)=>{
-          return [
-            statistical.id,
-            statistical.eventName,
-            statistical.cost,
-            statistical.numberOfParticipants,
-            statistical.revenue,
-            statistical.note,
-            (
+          return {
+            id:statistical.id,
+            eventName:statistical.eventName,
+            cost:new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(statistical.cost),
+            numberOfParticipants:new Intl.NumberFormat( { style: 'decimal' }).format(statistical.numberOfParticipants),
+            revenue:new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(statistical.revenue),
+            note:statistical.note,
+            actions:(
               // we've added some custom button actions
               <div className="actions-right">   
                 {/* use this button to add a edit kind of action */}
@@ -189,7 +197,7 @@ class Statistic extends Component {
                 </Button>{" "}
               </div>
             )
-          ]
+          }
         })
         this.setState({data:statistical});
       })
@@ -212,11 +220,20 @@ class Statistic extends Component {
           },
           })
         .then(res => {
+          if(res.data.errors){
+            this.setState({openAdd:false,color:false,openSnackbar:true})
+            return;
+          }
           this.fetchData();
+          this.setState({openAdd:false,openSnackbar:true,color:true});
         }
         )
-        .catch(err => console.log(err));
-      this.setState({openAdd:false});
+        .catch(err =>{
+          
+            this.setState({openAdd:false,color:false,openSnackbar:true})
+          
+        });
+      
     }
     onConfirmDelete = ()=>{
       axios.post(`http://localhost:3001/graphql`, {
@@ -256,12 +273,23 @@ class Statistic extends Component {
           },
           })
         .then(res => {
+          if(res.data.errors){
+            this.setState({openUpdate:false,color:false,openSnackbar:true})
+            return;
+          }
           this.fetchData();
-          this.setState({openUpdate:false});
+          this.setState({openUpdate:false,color:true,openSnackbar:true});
         }
         )
         .catch(err => console.log(err));
     }
+    handleClose = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+
+    this.setState({openSnackbar : false})
+    };
       render() {
         const { classes } = this.props;
         return (
@@ -279,7 +307,7 @@ class Statistic extends Component {
                 </CardHeader>
                 <CardBody>
 
-                  <Table
+                  {/* <Table
                     tableHead={[
                       "STT",
                       "Tên sự kiện",
@@ -311,6 +339,44 @@ class Statistic extends Component {
                       classes.center,
                     ]}
                     customHeadClassesForCells={[0, 1, 2, 3, 4 , 5, 6]}
+                  /> */}
+                  <ReactTable
+                    data={this.state.data}
+                    filterable
+                    columns={[
+                      {
+                        Header: "STT",
+                        accessor: "id"
+                      },
+                      {
+                        Header: "Tên sự kiện",
+                        accessor: "eventName"
+                      },
+                      {
+                        Header: "Chi phí",
+                        accessor: "cost"
+                      },
+                      {
+                        Header: "Số lượt tham gia",
+                        accessor: "numberOfParticipants"
+                      },
+                      {
+                        Header: "Doanh thu",
+                        accessor: "revenue",
+                      },
+                      {
+                        Header: "Ghi chú",
+                        accessor: "note",
+                      },
+                      {
+                        Header: "",
+                        accessor: "actions",
+                      }
+                    ]}
+                    defaultPageSize={5}
+                    showPaginationTop
+                    showPaginationBottom={false}
+                    className="-striped -highlight"
                   />
                 </CardBody>
               </Card>
@@ -318,6 +384,21 @@ class Statistic extends Component {
             <DialogAddStatistical  open={this.state.openAdd} onCancel={this.onCancel} onConfirm={this.onConfirm} />
             <DialogConFirmDelete open={this.state.openDelete} onCancel={this.onCancel} onConfirm={this.onConfirmDelete} />
             <DialogUpdateStatistical open={this.state.openUpdate} onCancel={this.onCancel} onConfirm={this.onConfirmUpdate} />
+            <Snackbar
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={this.state.openSnackbar}
+              autoHideDuration={6000}
+              onClose={this.handleClose}
+            >
+              <MySnackbarContentWrapper
+                onClose={this.handleClose}
+                variant={this.state.color ===  true ? "success" : "error"}
+                message={this.state.color ===  true ? "Thành công!" : "Thất bại"}
+              />
+            </Snackbar>
           </GridContainer>
         );
       }

@@ -33,6 +33,7 @@ class DialogAddOrganization extends Component {
   }
   
   handleAddBoard=()=>{
+    if(!this.verifyData()) return
     const orgaName = this.orgaName.getValue();
     const address = this.address.getValue();
     const hotline = this.hotline.getValue();
@@ -40,7 +41,9 @@ class DialogAddOrganization extends Component {
     this.props.onConfirm(orgaName,address,hotline);   
     this.props.onCancel();
   }
- 
+  verifyData = () =>{
+    return this.orgaName.verifyInput() && this.address.verifyInput() && this.hotline.verifyInput();
+  }
   render() {
     const { classes } = this.props;
     return (
@@ -59,7 +62,7 @@ class DialogAddOrganization extends Component {
           disableTypography
           className={classes.modalHeader}
         >
-          <h4 className={classes.modalTitle}>Thêm tổ chức</h4>
+          <h4 className={classes.modalTitle}>THÊM TỔ CHỨC</h4>
         </DialogTitle>
         <DialogContent
           id="classic-modal-slide-description"

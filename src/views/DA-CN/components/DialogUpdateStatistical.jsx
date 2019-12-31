@@ -61,7 +61,7 @@ class DialogUpdateStatistical extends Component {
           disableTypography
           className={classes.modalHeader}
         >
-          <h4 className={classes.modalTitle}>ADD DEVICE</h4>
+          <h4 className={classes.modalTitle}>Chỉnh sửa thông tin</h4>
         </DialogTitle>
         <DialogContent
           id="classic-modal-slide-description"
@@ -101,14 +101,14 @@ class DialogUpdateStatistical extends Component {
             color="transparent"
             simple
           >
-            BACK
+            Hủy
           </Button>
           <Button
             color="success"
             onClick={() => this.handleAddBoard()}
             
           >
-            ADD
+            Lưu
           </Button>
         </DialogActions>
       </Dialog>

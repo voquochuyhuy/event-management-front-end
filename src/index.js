@@ -16,8 +16,8 @@ ReactDOM.render(
     <Switch>
       
       {/* <Route path="/auth" component={AuthLayout} />
-      <Route path="/admin" component={AdminLayout} />
-      <Redirect from="/" to="/admin/event-management" /> */}
+      <Route path="/admin" component={AdminLayout} /> */}
+      {/* <Redirect from="/" to="/auth/login" />  */}
       <Route path="/auth" component={AuthLayout} />
       <Route path="/" component={AdminLayout} />
     </Switch>

@@ -33,6 +33,7 @@ class DialogAddStatistical extends Component {
   }
   
   handleAddBoard=()=>{
+    if(!this.verifyData()) return
     const eventName = this.eventName.getValue();
     const cost = this.cost.getValue();
     const numberOfParti = this.numberOfParti.getValue();
@@ -42,7 +43,9 @@ class DialogAddStatistical extends Component {
     this.props.onConfirm(eventName,cost,numberOfParti,revenue,note);   
     this.props.onCancel()
   }
- 
+  verifyData = () =>{
+    return this.eventName.verifyInput() && this.cost.verifyInput() && this.numberOfParti.verifyInput()&& this.revenue.verifyInput()&& this.note.verifyInput();
+  }
   render() {
     const { classes } = this.props;
     return (
@@ -61,7 +64,7 @@ class DialogAddStatistical extends Component {
           disableTypography
           className={classes.modalHeader}
         >
-          <h4 className={classes.modalTitle}>ADD DEVICE</h4>
+          <h4 className={classes.modalTitle}>THÊM SỐ LIỆU</h4>
         </DialogTitle>
         <DialogContent
           id="classic-modal-slide-description"
@@ -101,14 +104,14 @@ class DialogAddStatistical extends Component {
             color="transparent"
             simple
           >
-            BACK
+            Hủy
           </Button>
           <Button
             color="success"
             onClick={() => this.handleAddBoard()}
             
           >
-            ADD
+            Lưu
           </Button>
         </DialogActions>
       </Dialog>
