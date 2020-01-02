@@ -229,25 +229,25 @@ class EventManagement extends Component {
           this.fetchData(); 
           this.setState({openAdd:false,openSnackbar:true,color:true});
          
-          // console.log(res)
-          // axios.post(`http://localhost:3001/graphql`, {
-          //   query: `mutation createStatisticalMutation($statistical:CreateStatisticalInput) {
-          //       createStatistical(createStatisticalInput:$statistical) { 
-          //         eventName
-          //       }
-          //     }`,
-          //   variables: {
-          //     statistical :{
-          //       "eventName": eventName,
-          //       "cost": 0,
-          //       "numberOfParticipants":0,
-          //       "revenue":0,
-          //       "note":'', 
-          //     }
-          //   },
-          //   })
-          //   .then(res => console.log(res))
-          //   .catch(err => console.log(err))
+          console.log(res)
+          axios.post(`http://localhost:3001/graphql`, {
+            query: `mutation createStatisticalMutation($statistical:CreateStatisticalInput) {
+                createStatistical(createStatisticalInput:$statistical) { 
+                  eventName
+                }
+              }`,
+            variables: {
+              statistical :{
+                "eventName": eventName,
+                "cost": 0,
+                "numberOfParticipants":0,
+                "revenue":0,
+                "note":'', 
+              }
+            },
+            })
+            .then(res => console.log(res))
+            .catch(err => console.log(err))
         })
         .catch(err => {
           this.setState({openAdd:false,color:false,openSnackbar:true})
