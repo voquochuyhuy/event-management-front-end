@@ -36,7 +36,7 @@ var dashRoutes = [
   
   {
     collapse: true,
-    name: "Trờ chơi",
+    name: "Trò chơi",
     icon: LaptopChromebook,
     views: [
       {

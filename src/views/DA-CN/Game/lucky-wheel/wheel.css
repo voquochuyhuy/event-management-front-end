@@ -52,10 +52,11 @@
 
 .wheel__reward p {
 	font-size: 25px;
+	margin-bottom: 15px;
 }
 
 .wheel__reward img {
-	width: 225px;
+	width: 180px;
 }
 
 .btn-close {

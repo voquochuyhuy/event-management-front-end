@@ -205,6 +205,10 @@ class EventManagement extends Component {
       });
     }
     onConfirmAdd = (eventName,organization,place,startTime,endTime)=>{
+      if (endTime <= startTime) {
+        alert('Ngày kết thúc không được nhỏ hơn ngày bắt đầu!');
+        return;
+      }
       axios.post(`http://localhost:3001/graphql`, {
         query: `mutation createEventMutation($event:CreateEventInput) {
             createEvent(createEventInput:$event) { 
@@ -281,6 +285,10 @@ class EventManagement extends Component {
       this.setState({open:false});
     }
     onConfirmUpdate = (eventName,organization,place,startTime,endTime)=>{
+      if (endTime <= startTime) {
+        alert('Ngày kết thúc không được nhỏ hơn ngày bắt đầu!');
+        return;
+      }
       axios.post(`http://localhost:3001/graphql`, {
         query: `mutation updateEventMutation($event:UpdateEventInput) {
             updateEvent(updateEventInput:$event) { 
